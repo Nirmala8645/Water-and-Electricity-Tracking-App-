@@ -1,0 +1,21 @@
+// settings.gradle (Project-level)
+
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' } // JitPack added
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' } // Ensure JitPack is here
+    }
+}
+
+rootProject.name = "TrackingApp" // Project name
+include ':app' // Include the app module
