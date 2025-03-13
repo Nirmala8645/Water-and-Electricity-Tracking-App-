@@ -2,8 +2,8 @@
 A mobile application that helps users monitor, limit, and optimize their water and electricity consumption. The app uses Firestore Database for storage, MPAndroidChart for data visualization, and behavioral nudges to encourage sustainable usage habits.
 
 # Features
-✅ User Authentication: Login & Sign-up using Firebase
-✅ Usage Tracking: Monitor daily & weekly water/electricity usage
+✅ User Authentication: Login & Sign-up using Firebase/n
+✅ Usage Tracking: Monitor daily & weekly water/electricity usage/n
 ✅ Smart Nudges: Get alerts before exceeding limits
 ✅ Statistics Dashboard: Graphs for easy data visualization
 ✅ Goal Setting: Set limits for water & electricity consumption
