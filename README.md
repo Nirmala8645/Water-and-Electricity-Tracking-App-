@@ -1,6 +1,7 @@
 # Water-and-Electricity-Tracking-App
 A mobile application that helps users monitor, limit, and optimize their water and electricity consumption. The app uses Firestore Database for storage, MPAndroidChart for data visualization, and behavioral nudges to encourage sustainable usage habits.
-Features
+
+# Features
 ✅ User Authentication: Login & Sign-up using Firebase
 ✅ Usage Tracking: Monitor daily & weekly water/electricity usage
 ✅ Smart Nudges: Get alerts before exceeding limits
@@ -8,7 +9,7 @@ Features
 ✅ Goal Setting: Set limits for water & electricity consumption
 ✅ Notifications: Encouragement messages & warnings
 
-Modules
+# Modules
 Module	Description
 User Authentication	Firebase login and sign-up system
 Usage Tracking	Tracks daily/weekly usage in real-time
@@ -16,17 +17,17 @@ Goal Management	Allows users to set limits for water/electricity usage
 Statistics & Reports	Displays usage trends via MPAndroidChart
 Notifications & Nudges	Sends alerts when usage crosses limits
 Data Sync & Storage	Uses Firebase Firestore for cloud storage
-Tech Stack
+
+# Tech Stack
 Language: Java (Android Studio)
 Frontend: XML for UI Design
 Backend: Firebase Firestore
 Data Visualization: MPAndroidChart
 Notifications: Android Notification Manager
-Installation & Setup
+
+# Installation & Setup
 1️⃣ Clone the Repository
-sh
-Copy code
-git clone https://github.com/yourusername/Water-and-Electricity-Tracking-App.git
+git clone
 2️⃣ Open in Android Studio
 Import the project into Android Studio
 Sync Gradle and install dependencies
@@ -36,13 +37,15 @@ Create a new project and add Google Services JSON
 Enable Firestore Database & Authentication
 4️⃣ Build & Run the App
 Click Run ▶️ in Android Studio
-Usage Instructions
+
+# Usage Instructions
 Sign Up/Login using Firebase authentication
 Set daily/weekly goals for water & electricity usage
 Track usage trends with interactive charts
 Get alerts & notifications when usage exceeds limits
 Monitor statistics for better consumption habits
-Screenshots
+![WhatsApp Image 2025-03-12 at 19 52 19_94008d60](https://github.com/user-attachments/assets/4c383108-164d-410d-8933-422ad4353cb6)
+
 1️⃣ Login Screen
 
 2️⃣ Home Screen
@@ -53,12 +56,12 @@ Screenshots
 
 5️⃣ Notifications
 
-Contributing
+# Contributing
 We welcome contributions! To contribute:
 
 Fork the repository
 Create a new branch (feature-branch)
 Make changes & commit them
 Push to GitHub and open a Pull Request
-License
+# License
 This project is licensed under the MIT License.
