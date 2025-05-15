@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private Button btnTrackUsage, btnSetGoals, btnViewStatistics, btnNudges, btnLogout;
+    private Button btnTrackUsage, btnSetGoals, btnViewStatistics, btnNudges, btnLogout ,btnDailyUsage;
     private TextView welcomeText;
     private static final int REQUEST_NOTIFICATION_PERMISSION = 1;
 
@@ -24,6 +24,8 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         // Initialize UI elements
+        btnDailyUsage = findViewById(R.id.btnDailyUsage);
+        btnDailyUsage.setOnClickListener(v -> startActivity(new Intent(this, DailyUsageActivity.class)));
         btnTrackUsage = findViewById(R.id.btnTrackUsage);
         btnSetGoals = findViewById(R.id.btnSetGoals);
         btnViewStatistics = findViewById(R.id.btnViewStatistics);
@@ -80,5 +82,4 @@ public class HomeActivity extends AppCompatActivity {
         NotificationHelper.sendGoalExceededNotification(this, message);
     }
 }
-
 
