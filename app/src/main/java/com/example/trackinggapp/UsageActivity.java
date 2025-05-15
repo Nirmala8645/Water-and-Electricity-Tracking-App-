@@ -12,7 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class UsageActivity extends AppCompatActivity {
@@ -49,12 +52,18 @@ public class UsageActivity extends AppCompatActivity {
                 float waterUsed = Float.parseFloat(waterInput);
                 float electricityUsed = Float.parseFloat(electricityInput);
 
-                // ✅ Save new usage data to Firestore
+                // ✅ Save new usage data to Firestore under daily subcollection with today's date
+                String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
                 Map<String, Object> usageData = new HashMap<>();
+                usageData.put("date", todayDate); // Important: also save date
                 usageData.put("waterUsed", waterUsed);
                 usageData.put("electricityUsed", electricityUsed);
 
-                firestore.collection("UsageData").document(userId)
+                firestore.collection("UsageData")
+                        .document(userId)
+                        .collection("daily")
+                        .document(todayDate)
                         .set(usageData)
                         .addOnSuccessListener(aVoid -> {
                             Toast.makeText(this, "Usage data saved successfully!", Toast.LENGTH_SHORT).show();
