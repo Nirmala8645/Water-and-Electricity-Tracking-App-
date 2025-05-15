@@ -14,8 +14,11 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class StatisticsActivity extends AppCompatActivity {
 
@@ -54,7 +57,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
                 tvGoal.setText("Goal: Water " + waterGoal + "L, Electricity " + electricityGoal + " kWh");
 
-                fetchUsageData();
+                fetchUsageData(); // Fetch usage after goal
             } else {
                 showError("No goal data found!");
             }
@@ -62,22 +65,33 @@ public class StatisticsActivity extends AppCompatActivity {
     }
 
     private void fetchUsageData() {
-        DocumentReference docRef = firestore.collection("UsageData").document(userId);
+        String todayDate = getCurrentDate();  // Helper method to get today's date in YYYY-MM-DD format
+        DocumentReference docRef = firestore.collection("UsageData")
+                .document(userId)
+                .collection("daily")
+                .document(todayDate);  // Fetch usage for today's date
+
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult().exists()) {
                 DocumentSnapshot document = task.getResult();
                 waterUsage = document.getLong("waterUsed") != null ? document.getLong("waterUsed") : 0;
                 electricityUsage = document.getLong("electricityUsed") != null ? document.getLong("electricityUsed") : 0;
 
+                // Display the fetched data in the TextViews
                 tvWaterUsage.setText("Water Usage: " + waterUsage + "L");
                 tvElectricityUsage.setText("Electricity Usage: " + electricityUsage + " kWh");
 
                 checkAndSendNotifications(); // Send notification if limit exceeded
-                updateCharts(); // Update circular charts
+                updateCharts(); // Update the charts
             } else {
-                showError("No usage data found!");
+                showError("No usage data found for today!");
             }
         });
+    }
+
+    private String getCurrentDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        return sdf.format(new Date());
     }
 
     private void checkAndSendNotifications() {
@@ -96,12 +110,28 @@ public class StatisticsActivity extends AppCompatActivity {
 
     private void updateChart(PieChart chart, String label, long usage, long goal, int color) {
         List<PieEntry> entries = new ArrayList<>();
-        float percentage = (float) usage / goal * 100;
-        entries.add(new PieEntry(percentage, label));
-        entries.add(new PieEntry(100 - percentage, "Remaining"));
+
+        float usedPercentage = Math.min((float) usage / goal * 100, 100); // max 100%
+        float exceededPercentage = usage > goal ? ((float) (usage - goal) / goal * 100) : 0;
+        float remainingPercentage = usage < goal ? (100 - usedPercentage) : 0;
+
+        if (usedPercentage > 0) {
+            entries.add(new PieEntry(usedPercentage, "Used"));
+        }
+        if (remainingPercentage > 0) {
+            entries.add(new PieEntry(remainingPercentage, "Remaining"));
+        }
+        if (exceededPercentage > 0) {
+            entries.add(new PieEntry(exceededPercentage, "Exceeded"));
+        }
 
         PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setColors(color, Color.LTGRAY);
+        List<Integer> colors = new ArrayList<>();
+        if (usedPercentage > 0) colors.add(color); // Used = cyan/blue
+        if (remainingPercentage > 0) colors.add(Color.LTGRAY); // Remaining = gray
+        if (exceededPercentage > 0) colors.add(Color.RED); // Exceeded = red
+
+        dataSet.setColors(colors);
         dataSet.setValueTextSize(14f);
         dataSet.setDrawValues(false);
 
@@ -111,13 +141,17 @@ public class StatisticsActivity extends AppCompatActivity {
         chart.getDescription().setEnabled(false);
         chart.setHoleRadius(75f);
         chart.setTransparentCircleRadius(80f);
-        chart.setCenterText(String.format("%.0f%%", percentage));
+        chart.setCenterText(usage > goal
+                ? "100% + Exceeded"
+                : String.format("%.0f%%", usedPercentage));
         chart.setCenterTextSize(16f);
         chart.setEntryLabelTextSize(12f);
         chart.getLegend().setEnabled(false);
 
         chart.invalidate();
     }
+
+
 
     private void showError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
